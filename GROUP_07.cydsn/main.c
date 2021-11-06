@@ -27,15 +27,18 @@ int main(void)
    
     Mux_Start();
     
-    isr_ADC_Start();
+    isr_ADC_StartEx(My_ISR);
     
     Timer_Start();
     
-   
+    ADC_DelSig_StartConvert();
+    
 
     for(;;)
     {
         /* Place your application code here. */
+        
+        //to do: implementare invio dati
     }
 }
 
