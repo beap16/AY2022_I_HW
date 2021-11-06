@@ -43,8 +43,8 @@ the description of Control Register 1 for more info)
 
 Address      | Description   | R/W |
 :-----------:|---------------|:---:|
-0x00         | Control Reg 1 | R/W |
-0x01         | Control Reg 2 | R/W |
+0x00         | Control Reg 0 | R/W |
+0x01         | Control Reg 1 | R/W |
 0x02         | Who Am I      |  R  |
 0x03         | Ch0 Bit 15-8  |  R  |
 0x04         | Ch0 Bit 07-0  |  R  |
