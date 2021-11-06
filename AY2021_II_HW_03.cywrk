@@ -24,6 +24,7 @@
 <WriteAppMarketingVersionLastSavedWith v="4.4" />
 <CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize+CyPrjDependencyList" version="4">
 <wrkspc_dependencies>
+<wrkspc_dependency project="GROUP_07.cydsn\GROUP_07.cyprj" dependency="..\..\PSOC\PSoC_AnnotationLibrary\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 <wrkspc_dependency project="GROUP_07.cydsn\GROUP_07.cyprj" dependency="..\..\..\Downloads\PSoC_AnnotationLibrary\AnnotationLibrary\AnnotationLibrary_lib\AnnotationLibrary_lib.cylib\AnnotationLibrary_lib.cyprj" />
 </wrkspc_dependencies>
 </CyGuid_dcbd9771-0334-43dc-9cc3-fe99dc3c5316>
