@@ -46,15 +46,16 @@ uint16_t temp_mean=0;
 uint16_t ldr_mean=0;
 uint8_t status = OFF;
 uint8_t status_mask = 3;
+uint8_t check_status;
 
 
 CY_ISR(My_ISR)
-{
+{   
+    Timer_ReadStatusRegister();
    // status = (buffer[CR0] & status_mask) ;
     
     if(status == CH0 || status == BOTH){
     
-        Timer_ReadStatusRegister();
     
         Mux_Select(TEMP);
     
@@ -112,10 +113,10 @@ CY_ISR(My_ISR)
 
 //interrupt in callback della trasmissione
 void EZI2C_ISR_ExitCallback(void){
-    
+    check_status = (buffer[CR0] & status_mask);
     //cambio stato e gestione led
-    if (status != (buffer[CR0] & status_mask)){
-        status = (buffer[CR0] & status_mask) ;
+    if (status != check_status){
+        status = check_status ;
         if (status == BOTH) Pin_LED_Write(LED_ON);
         else Pin_LED_Write(LED_OFF);
     }
