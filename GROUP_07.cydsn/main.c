@@ -11,14 +11,28 @@
 */
 #include "project.h"
 #include "InterruptRoutines.h"
+
 #define LED_ON 1
 #define LED_OFF 0
+#define BUFFERSIZE 7
+//define buffer registers' indexes
+#define CR0 0
+#define TIMERP 1
+#define WhoAmI 2
+#define MSB_TEMP 3
+#define LSB_TEMP 4
+#define MSB_LDR 5
+#define LSB_LDR 6
+
+
+uint8_t buffer[BUFFERSIZE];
+uint8_t average_samples = 5;
+uint8_t timer_period;
 
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
 
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
     UART_Start();
     
     EZI2C_Start();
@@ -33,7 +47,25 @@ int main(void)
     
     ADC_DelSig_StartConvert();
     
-
+    // read timer period from the component
+    timer_period = Timer_ReadPeriod();
+    
+    //setting Buffer registers values
+    buffer[CR0] = (average_samples << 2);
+    buffer[TIMERP] = timer_period;
+    buffer[WhoAmI] = 0xBC;
+    buffer [MSB_TEMP] = 0x00;
+    buffer [LSB_TEMP]= 0x00;
+    buffer[MSB_LDR]= 0x00;
+    buffer[LSB_LDR] = 0x00;
+    
+    // Set up EZI2C buffer
+    EZI2C_SetBuffer1 (BUFFERSIZE, BUFFERSIZE-4, buffer);
+    
+    
+    
+    
+    
     for(;;)
     {
         /* Place your application code here. */
