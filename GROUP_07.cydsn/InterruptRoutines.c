@@ -16,6 +16,7 @@
 // define channels
 #define TEMP 0
 #define LDR 1 
+
 //define buffer registers' indexes
 #define CR0 0
 #define TIMERP 1
@@ -55,7 +56,6 @@ uint8_t check_average;
 CY_ISR(My_ISR)
 {   
     Timer_ReadStatusRegister();
-   // status = (buffer[CR0] & status_mask) ;
     
     if(status == CH0 || status == BOTH){
     

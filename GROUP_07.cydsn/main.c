@@ -65,7 +65,7 @@ int main(void)
     
     for(;;)
     { 
-        //to do: implementare invio dati
+      
     }
 }
 
