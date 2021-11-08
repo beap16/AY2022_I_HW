@@ -94,9 +94,9 @@ CY_ISR(My_ISR)
         }
         
         if(status == 2 || status == 3){
-            lux_mean=value_digit_LDR/average_samples;
+            ldr_mean=value_digit_LDR/average_samples;
             buffer[MSB_LDR] = ldr_mean >>8;
-            buffer[LSB_LDR] = tdr_mean & 0xFF;
+            buffer[LSB_LDR] = ldr_mean & 0xFF;
         }    
         
         value_digit_LDR=0;
