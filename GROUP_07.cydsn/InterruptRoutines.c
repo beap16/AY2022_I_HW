@@ -123,6 +123,14 @@ void EZI2C_ISR_ExitCallback(void){
         status = check_status ;
         if (status == BOTH) Pin_LED_Write(LED_ON);
         else Pin_LED_Write(LED_OFF);
+        //azzera il conteggio dei sample per il calcolo della media e riinizializzo i registri di dati a zero
+        i=0;
+        value_digit_LDR=0;
+        value_digit_temp=0;
+        buffer[MSB_LDR]=0;
+        buffer[LSB_LDR]=0;
+        buffer[MSB_TEMP]=0;
+        buffer[LSB_TEMP]=0;
     }
     //aggiornare valore di samples mediati, se variato
     if (average_samples != check_average)
@@ -132,6 +140,7 @@ void EZI2C_ISR_ExitCallback(void){
     if (timer_period != buffer[TIMERP])
     {
         timer_period = buffer[TIMERP];
+        Timer_WritePeriod(timer_period);
     }
     
 }
