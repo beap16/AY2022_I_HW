@@ -31,6 +31,10 @@
 #define OFF 0
 #define BOTH 3
 
+//defining led status
+#define LED_ON 1
+#define LED_OFF 0
+
 extern uint8_t average_samples;
 extern uint8_t  buffer[];
 
@@ -41,12 +45,12 @@ int i=0;
 uint16_t temp_mean=0;
 uint16_t ldr_mean=0;
 uint8_t status = OFF;
-uint8_t status_mask = 00000011;
+uint8_t status_mask = 3;
 
 
 CY_ISR(My_ISR)
 {
-    status = (buffer[CR0] & status_mask) ;
+   // status = (buffer[CR0] & status_mask) ;
     
     if(status == CH0 || status == BOTH){
     
@@ -87,13 +91,13 @@ CY_ISR(My_ISR)
     
     if (i>=average_samples)
     {
-        if(status == 1 || status == 3){
+        if(status == CH0 || status == BOTH){
             temp_mean=value_digit_temp/average_samples;
             buffer[MSB_TEMP] = temp_mean >>8;
             buffer[LSB_TEMP] = temp_mean & 0xFF;
         }
         
-        if(status == 2 || status == 3){
+        if(status == CH1 || status == BOTH){
             ldr_mean=value_digit_LDR/average_samples;
             buffer[MSB_LDR] = ldr_mean >>8;
             buffer[LSB_LDR] = ldr_mean & 0xFF;
@@ -106,4 +110,15 @@ CY_ISR(My_ISR)
     
 }
 
+//interrupt in callback della trasmissione
+void EZI2C_ISR_ExitCallback(void){
+    
+    //cambio stato e gestione led
+    if (status != (buffer[CR0] & status_mask)){
+        status = (buffer[CR0] & status_mask) ;
+        if (status == BOTH) Pin_LED_Write(LED_ON);
+        else Pin_LED_Write(LED_OFF);
+    }
+    
+}
 /* [] END OF FILE */

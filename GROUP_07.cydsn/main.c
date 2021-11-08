@@ -12,8 +12,6 @@
 #include "project.h"
 #include "InterruptRoutines.h"
 
-#define LED_ON 1
-#define LED_OFF 0
 #define BUFFERSIZE 7
 //define buffer registers' indexes
 #define CR0 0
@@ -66,9 +64,7 @@ int main(void)
     
     
     for(;;)
-    {
-        /* Place your application code here. */
-        
+    { 
         //to do: implementare invio dati
     }
 }
