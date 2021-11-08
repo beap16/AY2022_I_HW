@@ -37,6 +37,7 @@
 
 extern uint8_t average_samples;
 extern uint8_t  buffer[];
+extern uint8_t timer_period;
 
 int32 value_digit_LDR=0;
 int32 value_digit_temp=0;
@@ -46,7 +47,9 @@ uint16_t temp_mean=0;
 uint16_t ldr_mean=0;
 uint8_t status = OFF;
 uint8_t status_mask = 3;
+uint8_t average_mask = 15<<2;
 uint8_t check_status;
+uint8_t check_average;
 
 
 CY_ISR(My_ISR)
@@ -114,11 +117,21 @@ CY_ISR(My_ISR)
 //interrupt in callback della trasmissione
 void EZI2C_ISR_ExitCallback(void){
     check_status = (buffer[CR0] & status_mask);
+    check_average = (buffer[CR0]& average_mask);
     //cambio stato e gestione led
     if (status != check_status){
         status = check_status ;
         if (status == BOTH) Pin_LED_Write(LED_ON);
         else Pin_LED_Write(LED_OFF);
+    }
+    //aggiornare valore di samples mediati, se variato
+    if (average_samples != check_average)
+    { 
+        average_samples = check_average;
+    }
+    if (timer_period != buffer[TIMERP])
+    {
+        timer_period = buffer[TIMERP];
     }
     
 }
