@@ -16,7 +16,8 @@
 // define channels
 #define TEMP 0
 #define LDR 1
-#define SAMPLES 5
+
+extern uint8_t average_samples;
 
 int32 value_digit_LDR=0;
 int32 value_digit_temp=0;
@@ -32,6 +33,8 @@ CY_ISR(My_ISR)
     
     Mux_Select(TEMP);
     
+    ADC_DelSig_StartConvert();
+    
     value_digit= ADC_DelSig_Read32();
     
     if (value_digit<0) value_digit=0;
@@ -39,8 +42,11 @@ CY_ISR(My_ISR)
     
     value_digit_temp += value_digit;
     
+    ADC_DelSig_StopConvert();
     
     Mux_Select(LDR);
+    
+    ADC_DelSig_StartConvert();
     
     value_digit = ADC_DelSig_Read32();
     
@@ -49,12 +55,15 @@ CY_ISR(My_ISR)
     
     value_digit_LDR += value_digit;
     
+    ADC_DelSig_StopConvert();
+    
     i++;
     
-    if (i>=SAMPLES)
+    
+    if (i>=average_samples)
     {
-        temp_mean=value_digit_temp/SAMPLES;
-        lux_mean=value_digit_LDR/SAMPLES; 
+        temp_mean=value_digit_temp/average_samples;
+        lux_mean=value_digit_LDR/average_samples; 
         //conversione
         value_digit_LDR=0;
         value_digit_temp=0;

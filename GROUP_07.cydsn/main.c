@@ -45,7 +45,6 @@ int main(void)
     
     Timer_Start();
     
-    ADC_DelSig_StartConvert();
     
     // read timer period from the component
     timer_period = Timer_ReadPeriod();
