@@ -117,7 +117,7 @@ CY_ISR(My_ISR)
 //interrupt in callback della trasmissione
 void EZI2C_ISR_ExitCallback(void){
     check_status = (buffer[CR0] & status_mask);
-    check_average = (buffer[CR0]& average_mask);
+    check_average = (buffer[CR0]& average_mask)>>2;
     //cambio stato e gestione led
     if (status != check_status){
         status = check_status ;
@@ -137,6 +137,7 @@ void EZI2C_ISR_ExitCallback(void){
     { 
         average_samples = check_average;
     }
+    //aggiornare valore di periodo, se variato
     if (timer_period != buffer[TIMERP])
     {
         timer_period = buffer[TIMERP];

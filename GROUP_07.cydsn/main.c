@@ -30,8 +30,6 @@ uint8_t timer_period;
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
-
-    UART_Start();
     
     EZI2C_Start();
     
