@@ -1,12 +1,7 @@
 /* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
+ * GRUPPO 7
+ * Fossati Veronica
+ * Prato Beatrice
  * ========================================
 */
 #ifndef __INTERRUPT_ROUTINE_H

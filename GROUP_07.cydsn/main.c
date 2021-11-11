@@ -1,19 +1,18 @@
 /* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
+ * GRUPPO 7
+ * Fossati Veronica
+ * Prato Beatrice
  * ========================================
 */
 #include "project.h"
 #include "InterruptRoutines.h"
 
+/*DICHIARAZIONI*/
+
+//definizione dimesione buffer (fissa)
 #define BUFFERSIZE 7
-//define buffer registers' indexes
+
+//definizione indici dei registri del buffer (da specifiche di progetto)
 #define CR0 0
 #define TIMERP 1
 #define WhoAmI 2
@@ -22,14 +21,17 @@
 #define MSB_LDR 5
 #define LSB_LDR 6
 
-
+//dichiarazione buffer, periodo del timer e numero di campioni da mediare
 uint8_t buffer[BUFFERSIZE];
-uint8_t average_samples = 5;
+uint8_t average_samples = 5; //inizializzato a 5, come da specifiche, ma modificabile da Bridge Control Panel per
+                             //personalizzare la comunicazione
 uint8_t timer_period;
 
 int main(void)
 {
-    CyGlobalIntEnable; /* Enable global interrupts. */
+    /*AVVIO INTERRUPT E COMPONENTI UTILI AL CAMPIONAMENTO*/
+    
+    CyGlobalIntEnable; 
     
     EZI2C_Start();
     
@@ -42,23 +44,23 @@ int main(void)
     Timer_Start();
     
     
-    // read timer period from the component
+    /*SETTAGGIO DEL BUFFER DELLO SLAVE*/
+    
+    //periodo inizializzato al valore impostato da TopDesign (T=4 con frequenza di clock a 1kHz per ottenere 
+    //periodo di campionamento T=4ms --> calcolo media e invio ogni 20ms (50Hz))
     timer_period = Timer_ReadPeriod();
     
-    //setting Buffer registers values
-    buffer[CR0] = (average_samples << 2);
+    //settaggio dei valori iniziali dei registri del buffer
+    buffer[CR0] = (average_samples << 2); //valore iniziale: 00010100 --> campionamento non attivo
     buffer[TIMERP] = timer_period;
-    buffer[WhoAmI] = 0xBC;
+    buffer[WhoAmI] = 0xBC; //fisso
     buffer [MSB_TEMP] = 0x00;
     buffer [LSB_TEMP]= 0x00;
     buffer[MSB_LDR]= 0x00;
     buffer[LSB_LDR] = 0x00;
     
-    // Set up EZI2C buffer
+    //creazione EZI2C buffer
     EZI2C_SetBuffer1 (BUFFERSIZE, BUFFERSIZE-4, buffer);
-    
-    
-    
     
     
     for(;;)
