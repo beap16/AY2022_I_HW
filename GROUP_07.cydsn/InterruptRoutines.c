@@ -1,5 +1,5 @@
 /* ========================================
- * GRUPPO 7
+ * GRUPPO 07
  * Fossati Veronica
  * Prato Beatrice
  * ========================================
@@ -10,7 +10,7 @@
 
 /*DICHIARAZIONI*/
 
-//definizione canali (CH0 --> temperatura, CH1 --> ldr)
+//definizione canali (CH0 --> temperatura, CH1 --> LDR)
 #define TEMP 0
 #define LDR 1 
 
@@ -57,7 +57,7 @@ uint8_t check_average;
 
 
 /*ISR PER LA GESTIONE DEL CAMPIONAMENTO, DEL CALCOLO DELLA MEDIA E DELLA SCRITTURA DEI 16 BIT DI DATO DEI DUE CANALI
-  NEI RISPERRIVI REGISTRI DEL BUFFER (frequenza di campionamento e numero di samples da mediare possono essere modificate
+  NEI RISPETTIVI REGISTRI DEL BUFFER (frequenza di campionamento e numero di samples da mediare possono essere modificate
   tramite la scrittura sui rispettivi registri da Bridge Control Panel, i loro valori determinano la frequenza di 
   trasmissione del dato; nel codice i valori sono inizializzati secondo le specifiche di progetto, ma l'utente
   può personalizzare la comunicazione settando i valori opportuni)*/
@@ -148,7 +148,7 @@ void EZI2C_ISR_ExitCallback(void)
     }
     
     if (average_samples != check_average)  //se l'utente ha modificato il numero di samples da mediare (bit 5-2 del
-                                           //control register 0
+                                           //control register 0)
     { 
         average_samples = check_average;   //aggiornare la variabile in funzione del cambiamento avvenuto su registro
     }
