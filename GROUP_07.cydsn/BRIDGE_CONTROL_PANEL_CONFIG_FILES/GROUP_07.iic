@@ -1,0 +1,49 @@
+;LEGENDA REGISTRI (i valori iniziali dei registri sono impostati in modo da 
+;rispettare le specifiche di progetto, ma i registri di read/write sono 
+;modificabili per ottenere una gestione variabile della comunicazione -->
+;utilizzare le codifiche esadecimali per settare correttamente i registri)
+
+;Control register 0:  address 0x00, 
+;      bit 7-6: reserved
+;      bit 5-2: N = numero di samples da mediare (valore iniziale 0101 --> N=5)
+;      bit 1-0: status (valore iniziale 00)
+;               00 --> status off (campionamento spento)
+;               01 --> campionamento CH0 (temperatura)
+;               10 --> campionamento CH1 (luminosità)
+;               11 --> campionamento di CH0 e CH1
+;Control register 1: address 0x01, 
+;      bit 7-0: T = periodo del timer (valore iniziale 00000100 --> T=4ms così
+;               da ottenere un periodo di trasmissione di N*T=5*4ms=20ms, 
+;               ovvero 50Hz)
+;WhoAmI (read only): address 0x02, valore di default 0xBC
+;Registri di dati (read only): valori iniziali 0x00
+;      address 0x02 --> MSB temperatura
+;      address 0x03 --> LSB temperatura
+;      address 0x04 --> MSB luminosità
+;      address 0x05 --> LSB luminosità
+
+;Per impostare periodo di campionamento T=4ms in modo da ottenere trasmissione
+;a 50HZ
+w 08 01 04 p ;scrivere valore 4 nel registro 0x01
+
+;Per accendere il dispositivo e campionare entrambi i canali (status 11), con
+;numero di samples da mediare pari a N=5 (samples a 0101)
+w 08 00 17 p ;scrivere valore 17 (00010111) nel registro 0x00
+
+;Per leggere i dati di temperatura e luminosità (lettura dei registri da 0x03 a
+;0x06 contenenti i valori medi di N samples in 16 bit)
+w 08 03 p 
+r 08 @1temp @0temp @1ldr @0ldr ;in modalità "repeat"
+
+;Per campionare soltanto la temperatura (CH0) (status 01)
+w 08 00 15 p ;scrivere 00010101
+w 08 03 p 
+r 08 @1temp @0temp ;in modalità "repeat"
+
+;Per campionare soltanto la luminosità (CH1) (status 10)
+w 08 00 16 p ;scrivere 00010110
+w 08 05 p 
+r 08 @1ldr @0ldr ;in modalità "repeat"
+
+;Per spegnere il dispositivo (status 00)
+w 08 00 14 p ;scrivere 00010100
